@@ -38,6 +38,7 @@
 				array('label'=>'Home', 'url'=>array('/site/index')),
 				array('label'=>'Mahasiswa', 'url'=>array('/mahasiswa')),
 				array('label'=>'Matakuliah', 'url'=>array('/matakuliah')),
+				array('label'=>'Hari', 'url'=>array('/hari')),
 				array('label'=>'Jadwal', 'url'=>array('/Jadwal')),
 				array('label'=>'Perkuliahan', 'url'=>array('/perkuliahan')),
 				array('label'=>'Kehadiran', 'url'=>array('/kehadiran')),
