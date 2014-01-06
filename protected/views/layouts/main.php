@@ -42,7 +42,6 @@
 				array('label'=>'Jadwal', 'url'=>array('/Jadwal')),
 				array('label'=>'Perkuliahan', 'url'=>array('/perkuliahan')),
 				array('label'=>'Kehadiran', 'url'=>array('/kehadiran')),
-				array('label'=>'Anu', 'url'=>array('/anu')),
 				array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
 				array('label'=>'Contact', 'url'=>array('/site/contact')),
 				array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
