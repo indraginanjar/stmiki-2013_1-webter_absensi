@@ -22,8 +22,8 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'hari'); ?>
-		<?php echo $form->textArea($model,'hari',array('rows'=>6, 'cols'=>50)); ?>
+		<?php echo $form->label($model,'hari_id'); ?>
+		<?php echo $form->textField($model,'hari_id'); ?>
 	</div>
 
 	<div class="row">

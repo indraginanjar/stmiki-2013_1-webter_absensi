@@ -26,9 +26,9 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'hari'); ?>
-		<?php echo $form->textArea($model,'hari',array('rows'=>6, 'cols'=>50)); ?>
-		<?php echo $form->error($model,'hari'); ?>
+		<?php echo $form->labelEx($model,'hari_id'); ?>
+		<?php echo $form->textField($model,'hari_id'); ?>
+		<?php echo $form->error($model,'hari_id'); ?>
 	</div>
 
 	<div class="row">

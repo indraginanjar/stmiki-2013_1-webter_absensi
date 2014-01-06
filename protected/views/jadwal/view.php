@@ -23,7 +23,7 @@ $this->menu=array(
 	'attributes'=>array(
 		'id',
 		'matakuliah_id',
-		'hari',
+		'hari_id',
 		'mulai',
 		'selesai',
 	),

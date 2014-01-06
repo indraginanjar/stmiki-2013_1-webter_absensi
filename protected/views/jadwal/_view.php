@@ -13,8 +13,8 @@
 	<?php echo CHtml::encode($data->matakuliah_id); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('hari')); ?>:</b>
-	<?php echo CHtml::encode($data->hari); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('hari_id')); ?>:</b>
+	<?php echo CHtml::encode($data->hari_id); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('mulai')); ?>:</b>
