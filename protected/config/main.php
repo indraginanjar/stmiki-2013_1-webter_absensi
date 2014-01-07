@@ -34,6 +34,8 @@ return array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
 		),
+		'CGridViewPlus' => array('class' => 'components.CGridViewPlus',
+		),
 		// uncomment the following to enable URLs in path-format
 		/*
 		'urlManager'=>array(
