@@ -24,9 +24,7 @@
 		<?php //echo $form->textField($model,'matakuliah_id'); ?>
 		<?php
 			$this->widget('zii.widgets.jui.CJuiAutoComplete',array(
-			    	'name'=>'matakuliah_id',
-			    	'model' => 'Matakuliah',
-				'attribute' => array('matakuliah_id'),
+			    	'name'=> get_class($model).'[matakuliah_id]',
 			    	'source'=>$this->createUrl('matakuliah/jsonAutoComplete'),
 			    	// additional javascript options for the autocomplete plugin
 			    	//'options'=>array(
