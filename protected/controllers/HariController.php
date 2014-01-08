@@ -170,20 +170,4 @@ class HariController extends Controller
 			Yii::app()->end();
 		}
 	}
-
-	public function actionJsonAutoCompleteMatakuliah($term = null)
-	{
-		$criteria = new CDbCriteria;
-		$criteria->addSearchCondition('id', $term, true);
-		$criteria->addSearchCondition('nama', $term, true, 'OR');
-		$collection = Matakuliah::model()->findAll($criteria);
-		$source = array();
-		foreach($collection as $item){
-			$option = new stdClass();
-			$option->label = $item->attributes['nama'] . ' | ' . $item->attributes['id'];
-			$option->value = $item->attributes['id'];
-			$source[] = $option;
-		}
-		echo json_encode($source);
-	}
 }
