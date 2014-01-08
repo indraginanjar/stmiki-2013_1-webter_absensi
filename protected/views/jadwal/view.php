@@ -24,6 +24,7 @@ $this->menu=array(
 		'id',
 		'matakuliah_id',
 		'hari_id',
+		'hari.nama',
 		'mulai',
 		'selesai',
 	),

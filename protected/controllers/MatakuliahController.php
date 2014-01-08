@@ -32,7 +32,10 @@ class MatakuliahController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create'
+						,'update'
+						,'jsonAutoComplete'
+						),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -169,5 +172,22 @@ class MatakuliahController extends Controller
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
+	}
+
+	public function actionJsonAutoComplete($term = null)
+	{
+		$criteria = new CDbCriteria;
+		$criteria->addSearchCondition('id', $term, true);
+		$criteria->addSearchCondition('nama', $term, true, 'OR');
+		$criteria->limit = 50;
+		$collection = Matakuliah::model()->findAll($criteria);
+		$source = array();
+		foreach($collection as $item){
+			$option = new stdClass();
+			$option->label = $item->attributes['nama'] . ' | ' . $item->attributes['id'];
+			$option->value = $item->attributes['id'];
+			$source[] = $option;
+		}
+		echo json_encode($source);
 	}
 }

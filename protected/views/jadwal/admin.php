@@ -40,18 +40,111 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 )); ?>
 </div><!-- search-form -->
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+<?php 
+	//$this->widget('CGridViewPlus', array(
+	 $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'jadwal-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
 		'id',
 		'matakuliah_id',
+		'matakuliah.nama:text:Nama Matakuliah',
 		'hari_id',
+		'hari.nama:text:Nama Hari',
 		'mulai',
 		'selesai',
 		array(
 			'class'=>'CButtonColumn',
+			),
 		),
+	/*
+	'columns'=>array(
+		array(
+			'name'=>'id',
+			'headerHtmlOptions'=>array(
+					'rowspan'=>2,
+					'style'=>'width:92px',
+				),
+			),
+		array(
+			'header'=>'Matakuliah',
+			'value'=>'',
+			'headerHtmlOptions'=>array(
+					'colspan'=>2,
+				),
+			),
+		array(
+			'name'=>'matakuliah_id',
+			'header'=>'ID',
+			'headerHtmlOptions'=>array(
+					'data-header_row'=>1,
+				),
+			),
+		array(
+			'name'=>'matakuliah.nama',
+			'header'=>'Nama',
+			'headerHtmlOptions'=>array(
+					'data-header_row'=>1,
+				),
+			),
+		array(
+			'header'=>'Hari',
+			'value'=>'',
+			'headerHtmlOptions'=>array(
+					'colspan'=>2,
+				),
+			),
+		array(
+			'name'=>'hari_id',
+			'header'=>'ID',
+			'headerHtmlOptions'=>array(
+					'data-header_row'=>1,
+				),
+			),
+		array(
+			'name'=>'hari.nama',
+			'header'=>'Nama',
+			'headerHtmlOptions'=>array(
+					'data-header_row'=>1,
+				),
+			),
+		array(
+			'name'=>'mulai',
+			'headerHtmlOptions'=>array(
+					'rowspan'=>2,
+				),
+			),
+		array(
+			'name'=>'selesai',
+			'headerHtmlOptions'=>array(
+					'rowspan'=>2,
+				),
+			),
+		array(
+			'class'=>'CButtonColumn',
+			'headerHtmlOptions'=>array(
+					'rowspan'=>2,
+				),
+			),
 	),
+	'columnPerRow'=>8,
+	'headerRow'=>2,
+	'addingHeaders' => array(
+		array(
+			array('text' => 'ID', 'options'=>array('rowspan'=>2)),
+			array('text' => 'Matakuliah', 'colspan'=>2),
+			array('text' => 'Hari', 'colspan'=>2),
+			array('text' => 'Mulai', 'options'=>array('rowspan'=>2)),
+			array('text' => 'Selesai', 'options'=>array('rowspan'=>2)),
+			array('text' => '', 'options'=>array('rowspan'=>2)),
+			),
+		array(
+			array('text'=>'ID'),
+			array('text'=>'Nama'),
+			array('text'=>'ID'),
+			array('text'=>'Nama'),
+			),
+		),	
+	*/
 )); ?>

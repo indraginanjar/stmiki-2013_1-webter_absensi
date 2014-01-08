@@ -21,25 +21,45 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'matakuliah_id'); ?>
-		<?php echo $form->textField($model,'matakuliah_id'); ?>
+		<?php //echo $form->textField($model,'matakuliah_id'); ?>
+		<?php
+			$this->widget('zii.widgets.jui.CJuiAutoComplete',array(
+			    	'name'=>'matakuliah_id',
+			    	'model' => 'Matakuliah',
+				'attribute' => array('matakuliah_id'),
+			    	'source'=>$this->createUrl('matakuliah/jsonAutoComplete'),
+			    	// additional javascript options for the autocomplete plugin
+			    	//'options'=>array(
+				//	'minLength'=>'1',
+			    	//),
+			    	'htmlOptions'=>array(
+					'style'=>'height:20px;',
+			    	),
+			));
+		?>
 		<?php echo $form->error($model,'matakuliah_id'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'hari_id'); ?>
-		<?php echo $form->textField($model,'hari_id'); ?>
+		<?php //echo $form->textField($model,'hari_id'); ?>
+		<?php
+			$modelsreg = Hari::model()->findAll(array('select' => array('id', 'nama')));
+			$list = CHtml::listData($modelsreg, 'id', 'nama');
+			echo CHtml::activedropDownList($model,'hari_id', $list, array('empty' => 'Pilih'));
+		?>
 		<?php echo $form->error($model,'hari_id'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'mulai'); ?>
-		<?php echo $form->textField($model,'mulai'); ?>
+		<?php echo $form->textField($model,'mulai', array('placeholder'=>'hh:mm')); ?>
 		<?php echo $form->error($model,'mulai'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'selesai'); ?>
-		<?php echo $form->textField($model,'selesai'); ?>
+		<?php echo $form->textField($model,'selesai', array('placeholder'=>'hh:mm')); ?>
 		<?php echo $form->error($model,'selesai'); ?>
 	</div>
 

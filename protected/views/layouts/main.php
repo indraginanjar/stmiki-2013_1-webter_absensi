@@ -67,9 +67,11 @@
 
 </div><!-- page -->
 </div>
-<script src="<?php echo Yii::app()->request->baseUrl; ?>/res/js/jquery-1.9.1.js"></script>
-<script src="<?php echo Yii::app()->request->baseUrl; ?>/res/jquery-ui/js/jquery-ui-1.10.3.custom.min.js"></script>
-<script src="<?php echo Yii::app()->request->baseUrl; ?>/res/js/jquery.ui.datepicker-id-ID.js"></script>
+<?php
+Yii::app()->getClientScript()->registerCoreScript('jquery.ui');
+?>
+
+<!--<script src="<?php echo Yii::app()->request->baseUrl; ?>/res/js/jquery.ui.datepicker-id-ID.js"></script>-->
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/res/js/common.js"></script>
 
 </body>

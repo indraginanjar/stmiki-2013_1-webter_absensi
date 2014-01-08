@@ -16,6 +16,9 @@
  */
 class Jadwal extends CActiveRecord
 {
+
+	public $matakuliah_nama;
+	public $hari_nama;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -34,6 +37,7 @@ class Jadwal extends CActiveRecord
 		return array(
 			array('matakuliah_id, hari_id, mulai, selesai', 'required'),
 			array('matakuliah_id, hari_id', 'numerical', 'integerOnly'=>true),
+			array(array('mulai', 'selesai'),'type', 'type'=>'time'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, matakuliah_id, hari_id, mulai, selesai', 'safe', 'on'=>'search'),
@@ -87,7 +91,9 @@ class Jadwal extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('matakuliah_id',$this->matakuliah_id);
+		$criteria->compare('matakuliah.nama',$this->matakuliah_nama,true);
 		$criteria->compare('hari_id',$this->hari_id);
+		$criteria->compare('hari.nama',$this->hari_nama);
 		$criteria->compare('mulai',$this->mulai,true);
 		$criteria->compare('selesai',$this->selesai,true);
 

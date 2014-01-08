@@ -22,8 +22,18 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->label($model,'matakuliah_nama'); ?>
+		<?php echo $form->textField($model,'matakuliah_nama'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->label($model,'hari_id'); ?>
 		<?php echo $form->textField($model,'hari_id'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'hari_nama'); ?>
+		<?php echo $form->textField($model,'hari_nama'); ?>
 	</div>
 
 	<div class="row">
