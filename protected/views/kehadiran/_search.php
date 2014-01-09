@@ -22,8 +22,28 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->label($model,'perkuliahan_pertemuan'); ?>
+		<?php echo $form->textField($model,'perkuliahan_pertemuan'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'perkuliahan_tanggal'); ?>
+		<?php echo $form->textField($model,'perkuliahan_tanggal'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->label($model,'mahasiswa_id'); ?>
 		<?php echo $form->textField($model,'mahasiswa_id'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'mahasiswa_nim'); ?>
+		<?php echo $form->textField($model,'mahasiswa_nim'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'mahasiswa_nama'); ?>
+		<?php echo $form->textField($model,'mahasiswa_nama'); ?>
 	</div>
 
 	<div class="row">

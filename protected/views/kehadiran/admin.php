@@ -47,7 +47,34 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'columns'=>array(
 		'id',
 		'perkuliahan_id',
+		array(
+			'name'=>'perkuliahan.pertemuan',
+			//'value'=>'$data->perkuliahan->pertemuan',
+			'filter'=>CHtml::activeTextField($model, 'perkuliahan_pertemuan'),
+			),
+		array(
+			//'name'=>'perkuliahan.matakuliah.nama',
+			'name'=>'perkuliahan.matakuliah.nama',
+			'filter'=>CHtml::activeTextField($model, 'matakuliah_nama'),
+			),
+		array(
+			'name'=>'perkuliahan.tanggal',
+			'filter'=>CHtml::activeTextField($model, 'perkuliahan_tanggal'),
+			),
+		array(
+			'name'=>'perkuliahan.mulai',
+			'filter'=>CHtml::activeTextField($model, 'perkuliahan_mulai'),
+			),
 		'mahasiswa_id',
+		array(
+			'name'=>'mahasiswa.nim',
+			'filter'=>CHtml::activeTextField($model, 'mahasiswa_nim'),
+			),
+		array(
+			'name'=>'mahasiswa.nama',
+			'header'=>'Nama Mahasiswa',
+			'filter'=>CHtml::activeTextField($model, 'mahasiswa_nama'),
+			),
 		'masuk',
 		'keluar',
 		array(

@@ -17,6 +17,12 @@
 class Kehadiran extends CActiveRecord
 {
 	public $matakuliah_nama;
+	public $mahasiswa_nama;
+	public $mahasiswa_nim;
+	public $perkuliahan_tanggal;
+	public $perkuliahan_pertemuan;
+	public $perkuliahan_mulai;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -37,7 +43,15 @@ class Kehadiran extends CActiveRecord
 			array('perkuliahan_id, mahasiswa_id', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, perkuliahan_id, mahasiswa_id, masuk, keluar', 'safe', 'on'=>'search'),
+			array('id, perkuliahan_id, mahasiswa_id, masuk, keluar,
+				matakuliah_nama,
+				mahasiswa_nama,
+				mahasiswa_nim,
+				perkuliahan_tanggal,
+				perkuliahan_pertemuan,
+				perkuliahan_mulai
+				',
+				'safe', 'on'=>'search'),
 		);
 	}
 
@@ -62,7 +76,14 @@ class Kehadiran extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'perkuliahan_id' => 'Perkuliahan',
+			'perkuliahan.matakuliah.nama' => 'Matakuliah',
+			'perkuliahan.pertemuan' => 'Pertemuan',
+			'perkuliahan_pertemuan' => 'Pertemuan',
+			'perkuliahan_tanggal' => 'Tanggal',
 			'mahasiswa_id' => 'Mahasiswa',
+			'mahasiswa_nama' => 'Nama Mahasiswa',
+			'mahasiswa.nim' => 'NIM',
+			'mahasiswa_nim' => 'NIM',
 			'masuk' => 'Masuk',
 			'keluar' => 'Keluar',
 		);
@@ -88,9 +109,19 @@ class Kehadiran extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('perkuliahan_id',$this->perkuliahan_id);
+		$criteria->compare('perkuliahan.tanggal',$this->perkuliahan_tanggal);
+		$criteria->compare('perkuliahan.mulai',$this->perkuliahan_mulai);
+		$criteria->compare('perkuliahan.matakuliah.nama',$this->matakuliah_nama);
 		$criteria->compare('mahasiswa_id',$this->mahasiswa_id);
+		$criteria->compare('mahasiswa.nama',$this->mahasiswa_nama);
 		$criteria->compare('masuk',$this->masuk,true);
 		$criteria->compare('keluar',$this->keluar,true);
+
+		$criteria->with = array(
+			'perkuliahan'=>array(),
+			'perkuliahan.matakuliah'=>array(),
+			'mahasiswa'=>array(),
+			);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
