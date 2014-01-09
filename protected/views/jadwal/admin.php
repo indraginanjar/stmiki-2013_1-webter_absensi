@@ -49,9 +49,21 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'columns'=>array(
 		'id',
 		'matakuliah_id',
-		'matakuliah.nama:text:Nama Matakuliah',
+		//'matakuliah.nama:text:Nama Matakuliah',
+		array(
+			'name'=>'matakuliah.nama',
+			//'value'=>'$data->hari->nama',
+			'header'=>'Nama Matakuliah',
+			'filter'=>CHtml::activeTextField($model, 'matakuliah_nama'),
+			),
 		'hari_id',
-		'hari.nama:text:Nama Hari',
+		//'hari_nama:text:Nama Hari',
+		array(
+			//'name'=>'hari.nama',
+			'value'=>'$data->hari->nama',
+			'header'=>'Nama Hari',
+			'filter'=>CHtml::activeTextField($model, 'hari_nama'),
+			),
 		'mulai',
 		'selesai',
 		array(

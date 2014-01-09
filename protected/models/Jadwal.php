@@ -40,7 +40,7 @@ class Jadwal extends CActiveRecord
 			array(array('mulai', 'selesai'),'type', 'type'=>'time'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, matakuliah_id, hari_id, mulai, selesai', 'safe', 'on'=>'search'),
+			array('id, matakuliah_id, hari_id, mulai, selesai, matakuliah_nama, hari_nama', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -96,6 +96,11 @@ class Jadwal extends CActiveRecord
 		$criteria->compare('hari.nama',$this->hari_nama);
 		$criteria->compare('mulai',$this->mulai,true);
 		$criteria->compare('selesai',$this->selesai,true);
+
+		$criteria->with = array(
+			'hari'=>array(),
+			'matakuliah'=>array(),
+			);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
