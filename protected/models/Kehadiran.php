@@ -16,6 +16,7 @@
  */
 class Kehadiran extends CActiveRecord
 {
+	public $matakuliah_nama;
 	/**
 	 * @return string the associated database table name
 	 */

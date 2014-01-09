@@ -32,7 +32,7 @@ class MahasiswaController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update', 'jsonAutoComplete'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -169,5 +169,23 @@ class MahasiswaController extends Controller
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
+	}
+
+	public function actionJsonAutoComplete($term = null)
+	{
+		$criteria = new CDbCriteria;
+		$criteria->addSearchCondition('id', $term, true);
+		$criteria->addSearchCondition('nama', $term, true, 'OR');
+		$criteria->addSearchCondition('nim', $term, true, 'OR');
+		$criteria->limit = 50;
+		$collection = Mahasiswa::model()->findAll($criteria);
+		$source = array();
+		foreach($collection as $item){
+			$option = new stdClass();
+			$option->label = $item->attributes['nama'] . ' | ' . $item->attributes['nim'] . ' | ' . $item->attributes['id'];
+			$option->value = $item->attributes['id'];
+			$source[] = $option;
+		}
+		echo json_encode($source);
 	}
 }

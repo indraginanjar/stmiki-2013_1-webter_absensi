@@ -32,7 +32,10 @@ class PerkuliahanController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create',
+					'update',
+					'jsonAutoComplete',
+					),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -169,5 +172,53 @@ class PerkuliahanController extends Controller
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
+	}
+
+	public function actionJsonAutoComplete($term = null)
+	{
+/*
+		$criteria = new CDbCriteria;
+		$criteria->addSearchCondition('id', $term, true);
+		$criteria->addSearchCondition('matakuliah.nama', $term, true, 'OR');
+		$criteria->limit = 50;
+		$collection = Perkuliahan::model()->findAll($criteria);
+		$source = array();
+		foreach($collection as $item){
+			$option = new stdClass();
+			$option->label = $item->matakuliah->attributes['nama'] . ' | ' . $item->attributes['id'];
+			$option->value = $item->attributes['id'];
+			$source[] = $option;
+		}
+		echo json_encode($source);
+*/
+		$res =array();
+
+		if (isset($_GET['term'])) {
+			// http://www.yiiframework.com/doc/guide/database.dao
+			$qtxt ='SELECT tbl_perkuliahan.id, tbl_matakuliah.nama as matakuliah_nama, pertemuan, tanggal, mulai, selesai 
+FROM tbl_perkuliahan
+left join tbl_matakuliah on tbl_matakuliah.id = tbl_perkuliahan.matakuliah_id
+WHERE tbl_perkuliahan.id = :term
+or tbl_matakuliah.nama like :term
+or pertemuan like :term
+or tanggal like :term
+or mulai like :term
+';
+			$command =Yii::app()->db->createCommand($qtxt);
+			$command->bindValue(":term", '%'.$_GET['term'].'%', PDO::PARAM_STR);
+			$res =$command->queryAll();
+		}
+
+		//echo CJSON::encode($res);
+
+		$source = array();
+		foreach($res as $item){
+			$option = new stdClass();
+			$option->label = $item['matakuliah_nama'] . ' | #' . $item['pertemuan'] . ' | ' . $item['tanggal'] . ' ' . $item['mulai'] . ' | ' .  $item['id'];
+			$option->value = $item['id'];
+			$source[] = $option;
+		}
+		echo json_encode($source);
+		Yii::app()->end();
 	}
 }
