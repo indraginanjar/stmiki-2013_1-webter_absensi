@@ -22,10 +22,11 @@ $this->menu=array(
 	'data'=>$model,
 	'attributes'=>array(
 		'id',
-		'matakuliah_id',
-		'pertemuan',
-		'tanggal',
-		'mulai',
-		'selesai',
+		'matakuliah_id:number:ID Matakuliah',
+		'matakuliah.nama:text:Nama Matakuliah',
+		'pertemuan:number',
+		'tanggal:date',
+		'mulai:time',
+		'selesai:time',
 	),
 )); ?>
