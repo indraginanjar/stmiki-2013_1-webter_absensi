@@ -47,6 +47,11 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'columns'=>array(
 		'id',
 		'matakuliah_id',
+		array(
+			'name'=>'matakuliah.nama',
+			'header'=>'Nama Matakuliah',
+			'filter'=>CHtml::activeTextField($model, 'matakuliah_nama'),
+			),
 		'pertemuan',
 		'tanggal',
 		'mulai',

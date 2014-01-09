@@ -17,6 +17,7 @@
  */
 class Perkuliahan extends CActiveRecord
 {
+	public $matakuliah_nama;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -37,7 +38,7 @@ class Perkuliahan extends CActiveRecord
 			array('matakuliah_id, pertemuan', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, matakuliah_id, pertemuan, tanggal, mulai, selesai', 'safe', 'on'=>'search'),
+			array('id, matakuliah_id, pertemuan, tanggal, mulai, selesai, matakuliah_nama', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -62,6 +63,7 @@ class Perkuliahan extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'matakuliah_id' => 'Matakuliah',
+			'matakuliah_nama' => 'Nama Matakuliah',
 			'pertemuan' => 'Pertemuan',
 			'tanggal' => 'Tanggal',
 			'mulai' => 'Mulai',
@@ -89,10 +91,15 @@ class Perkuliahan extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('matakuliah_id',$this->matakuliah_id);
+		$criteria->compare('matakuliah.nama',$this->matakuliah_nama,true);
 		$criteria->compare('pertemuan',$this->pertemuan);
 		$criteria->compare('tanggal',$this->tanggal,true);
 		$criteria->compare('mulai',$this->mulai,true);
 		$criteria->compare('selesai',$this->selesai,true);
+
+		$criteria->with = array(
+			'matakuliah'=>array(),
+			);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
