@@ -8,48 +8,33 @@ Tugas akhir semester Web Terapan
 
 ### Entities
 
-[Mahasiswa]
- *id
-  nim
-  nama
+```javascript
+Mahasiswa {*id, nim, nama}
   
-[Matakuliah]
- *id
-  nama
+Matakuliah {*id, nama}
   
-[Hari]
- *id
-  nama
+Hari {*id, nama}
   
-[Jadwal]
- *id
-  matakuliah_id*
-  hari_id*
-  mulai
-  selesai
+Jadwal {*id, matakuliah_id*, hari_id*, mulai, selesai}
   
-[Perkuliahan]
- *id
-  matakuliah_id*
-  pertemuan
-  tanggal
-  mulai
-  selesai
+Perkuliahan {*id, matakuliah_id*, pertemuan, tanggal, mulai, selesai}
   
-[Kehadiran]
- *id
-  perkuliahan_id*
-  mahasiswa_id*
-  masuk
-  keluar
+Kehadiran {*id, perkuliahan_id*, mahasiswa_id*, masuk, keluar}
+```
   
 
 ### Relationships
 
-[Jadwal] 1--1 [Matakuliah]
+```javascript
+[Jadwal] 1--* [Matakuliah]
+
 [Jadwal] 1--* [Hari]
+
 [Perkuliahan] 1--* [Matakuliah]
+
 [Kehadiran] 1--* [Perkuliahan]
+
 [Kehadiran] 1--* [Mahasiswa]
+```
 
  
