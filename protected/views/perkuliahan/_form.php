@@ -51,12 +51,13 @@
 		<?php // echo $form->textField($model,'tanggal'); ?>
 		<?php
 		$this->widget('zii.widgets.jui.CJuiDatePicker', array(
-		    'model' => $model,
-		    'attribute' => 'tanggal',
-		    'htmlOptions' => array(
-			'size' => '10',         // textField size
-			'maxlength' => '10',    // textField maxlength
-		    ),
+			'model' => $model,
+			'attribute' => 'tanggal',
+			'language' => 'id',
+			'htmlOptions' => array(
+				'size' => '10',         // textField size
+				'maxlength' => '10',    // textField maxlength
+				),
 		));
 		?>
 		<?php echo $form->error($model,'tanggal'); ?>

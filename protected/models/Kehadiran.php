@@ -107,21 +107,23 @@ class Kehadiran extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('perkuliahan_id',$this->perkuliahan_id);
-		$criteria->compare('perkuliahan.tanggal',$this->perkuliahan_tanggal);
-		$criteria->compare('perkuliahan.mulai',$this->perkuliahan_mulai);
-		$criteria->compare('perkuliahan.matakuliah.nama',$this->matakuliah_nama);
-		$criteria->compare('mahasiswa_id',$this->mahasiswa_id);
-		$criteria->compare('mahasiswa.nama',$this->mahasiswa_nama);
-		$criteria->compare('masuk',$this->masuk,true);
-		$criteria->compare('keluar',$this->keluar,true);
-
 		$criteria->with = array(
 			'perkuliahan'=>array(),
 			'perkuliahan.matakuliah'=>array(),
 			'mahasiswa'=>array(),
 			);
+
+		$criteria->compare('id',$this->id, true);
+		$criteria->compare('perkuliahan_id',$this->perkuliahan_id, true);
+		$criteria->compare('perkuliahan.pertemuan',$this->perkuliahan_pertemuan, true);
+		$criteria->compare('perkuliahan.tanggal',$this->perkuliahan_tanggal, true);
+		$criteria->compare('perkuliahan.mulai',$this->perkuliahan_mulai, true);
+		$criteria->compare('perkuliahan.matakuliah.nama',$this->matakuliah_nama, true);
+		$criteria->compare('mahasiswa_id',$this->mahasiswa_id, true);
+		$criteria->compare('mahasiswa.nama',$this->mahasiswa_nama, true);
+		$criteria->compare('mahasiswa.nim',$this->mahasiswa_nim, true);
+		$criteria->compare('masuk',$this->masuk,true);
+		$criteria->compare('keluar',$this->keluar,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
