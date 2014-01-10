@@ -89,4 +89,5 @@ return array(
 	),
 
 	'language'=>'id',
+	'theme'=>'abound',
 );
