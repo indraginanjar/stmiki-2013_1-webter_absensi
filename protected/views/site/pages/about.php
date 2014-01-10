@@ -97,4 +97,5 @@ $this->breadcrumbs=array(
         </footer>
     </form>
 </div>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/res/js/common.js"></script>
 
