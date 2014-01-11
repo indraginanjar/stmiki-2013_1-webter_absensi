@@ -24,6 +24,8 @@
 		<?php //echo $form->textField($model,'perkuliahan_id'); ?>
 		<?php
 			$this->widget('zii.widgets.jui.CJuiAutoComplete',array(
+				'model'=>$model,
+				'attribute'=>'perkuliahan_id',
 			    	'name'=> get_class($model).'[perkuliahan_id]',
 			    	'source'=>$this->createUrl('perkuliahan/jsonAutoComplete'),
 			    	// additional javascript options for the autocomplete plugin
@@ -43,6 +45,8 @@
 		<?php //echo $form->textField($model,'mahasiswa_id'); ?>
 		<?php
 			$this->widget('zii.widgets.jui.CJuiAutoComplete',array(
+				'model'=>$model,
+				'attribute'=>'mahasiswa_id',
 			    	'name'=> get_class($model).'[mahasiswa_id]',
 			    	'source'=>$this->createUrl('mahasiswa/jsonAutoComplete'),
 			    	// additional javascript options for the autocomplete plugin
