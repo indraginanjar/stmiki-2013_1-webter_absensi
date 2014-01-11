@@ -54,6 +54,11 @@
 			'model' => $model,
 			'attribute' => 'tanggal',
 			'language' => 'id',
+			'options'=>array(
+				'dateFormat' => 'mm-yy',
+				'showOtherMonths' =>true,
+				'selectOtherMonths' =>true,
+				),
 			'htmlOptions' => array(
 				'size' => '10',         // textField size
 				'maxlength' => '10',    // textField maxlength

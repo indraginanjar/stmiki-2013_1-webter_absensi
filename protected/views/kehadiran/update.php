@@ -13,6 +13,7 @@ $this->menu=array(
 	array('label'=>'Create Kehadiran', 'url'=>array('create')),
 	array('label'=>'View Kehadiran', 'url'=>array('view', 'id'=>$model->id)),
 	array('label'=>'Manage Kehadiran', 'url'=>array('admin')),
+	array('label'=>'Kehadiran Perbulan', 'url'=>array('perbulan')),
 );
 ?>
 

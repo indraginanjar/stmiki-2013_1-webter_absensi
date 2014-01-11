@@ -9,6 +9,7 @@ $this->breadcrumbs=array(
 $this->menu=array(
 	array('label'=>'Create Kehadiran', 'url'=>array('create')),
 	array('label'=>'Manage Kehadiran', 'url'=>array('admin')),
+	array('label'=>'Kehadiran Perbulan', 'url'=>array('perbulan')),
 );
 ?>
 

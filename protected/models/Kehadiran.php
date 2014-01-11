@@ -22,6 +22,8 @@ class Kehadiran extends CActiveRecord
 	public $perkuliahan_tanggal;
 	public $perkuliahan_pertemuan;
 	public $perkuliahan_mulai;
+	public $keterangan;
+	public $lama_di_kelas;
 
 	/**
 	 * @return string the associated database table name
@@ -124,6 +126,7 @@ class Kehadiran extends CActiveRecord
 		$criteria->compare('mahasiswa.nim',$this->mahasiswa_nim, true);
 		$criteria->compare('masuk',$this->masuk,true);
 		$criteria->compare('keluar',$this->keluar,true);
+		$criteria->compare('keterangan',$this->keterangan,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -139,5 +142,40 @@ class Kehadiran extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+
+	protected function afterFind()
+	{
+		parent::afterFind();
+
+		$toleransi = Yii::app()->params['toleransiKeterlambatan'] * 60;
+
+		$mulai = DateTime::createFromFormat('H:i', $this->perkuliahan->mulai);
+		$selesai = DateTime::createFromFormat('H:i', $this->perkuliahan->selesai);
+		$masuk = DateTime::createFromFormat('H:i', $this->masuk);
+		$keluar = DateTime::createFromFormat('H:i', $this->keluar);
+
+		$keterangan = array();
+		$diff = strtotime($this->perkuliahan->mulai) - strtotime($this->masuk);
+		if($diff > 0 - $toleransi) {
+			$keterangan[] = "Masuk Tepat Waktu";
+		}
+		else
+		{
+			$keterangan[] = "Terlambat";
+		}
+		$diff = strtotime($this->perkuliahan->selesai) - strtotime($this->keluar);
+		if($diff > 0)
+		{
+			$keterangan[] = "Keluar Sesuai Jadwal";
+		}
+		else
+		{
+			$keterangan[] = "Keluar Lebih dulu";
+		}
+		$this->keterangan = implode(', ', $keterangan);
+
+		//$this->lama_di_kelas = gmdate('H:i', strtotime($this->perkuliahan->selesai) -  strtotime($this->masuk));
+		$this->lama_di_kelas = $selesai->diff($masuk)->format('%H:%I');
 	}
 }

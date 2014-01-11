@@ -4,13 +4,13 @@
 
 $this->breadcrumbs=array(
 	'Kehadiran'=>array('index'),
-	'Manage',
+	'Perbulan',
 );
 
 $this->menu=array(
 	array('label'=>'List Kehadiran', 'url'=>array('index')),
 	array('label'=>'Create Kehadiran', 'url'=>array('create')),
-	array('label'=>'Kehadiran Perbulan', 'url'=>array('perbulan')),
+	array('label'=>'Manage Kehadiran', 'url'=>array('admin')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -27,7 +27,31 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Manage Kehadiran</h1>
+<h1>Kehadiran Perbulan</h1>
+
+<form>
+	<div class="row">
+		<?php echo 'Bulan'; ?>
+		<?php // echo $form->textField($model,'tanggal'); ?>
+		<?php
+		$this->widget('zii.widgets.jui.CJuiDatePicker', array(
+			//'model' => $model,
+			//'attribute' => 'tanggal',
+			'name'=>'bulan',
+			'language' => 'id',
+			'options'=>array(
+				'dateFormat' => 'mm-yy',
+				'showOtherMonths' =>true,
+				'selectOtherMonths' =>true,
+				),
+			'htmlOptions' => array(
+				'size' => '10',         // textField size
+				'maxlength' => '10',    // textField maxlength
+				),
+		));
+		?>
+	</div>
+</form>
 
 <p>
 You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
@@ -46,48 +70,25 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		'id',
-		'perkuliahan_id',
 		array(
-			'name'=>'perkuliahan.pertemuan',
-			//'value'=>'$data->perkuliahan->pertemuan',
-			'filter'=>CHtml::activeTextField($model, 'perkuliahan_pertemuan'),
-			),
-		array(
-			//'name'=>'perkuliahan.matakuliah.nama',
-			'name'=>'perkuliahan.matakuliah.nama',
-			'filter'=>CHtml::activeTextField($model, 'matakuliah_nama'),
-			),
-		array(
-			'name'=>'perkuliahan.tanggal',
-			'filter'=>CHtml::activeTextField($model, 'perkuliahan_tanggal'),
-			),
-		array(
-			'name'=>'perkuliahan.mulai',
-			'filter'=>CHtml::activeTextField($model, 'perkuliahan_mulai'),
-			),
-		'mahasiswa_id',
+			'header'=>'No.',
+			'value'=>'$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)',
+		      ),
 		array(
 			'name'=>'mahasiswa.nim',
 			'filter'=>CHtml::activeTextField($model, 'mahasiswa_nim'),
 			),
 		array(
+			//'name'=>'perkuliahan.matakuliah.nama',
 			'name'=>'mahasiswa.nama',
-			'header'=>'Nama Mahasiswa',
 			'filter'=>CHtml::activeTextField($model, 'mahasiswa_nama'),
 			),
 		'masuk',
 		'keluar',
+		'lama_di_kelas',
 		array(
 			'name'=>'keterangan',
 			'header'=>'Keterangan',
 			),
-		array(
-			'name'=>'lama_di_kelas',
-			//'header'=>'Lama di kelas',
-			),
-		array(
-			'class'=>'CButtonColumn',
-		),
 	),
 )); ?>

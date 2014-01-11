@@ -86,8 +86,10 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'indraginanjar@gmail.com',
+		'toleransiKeterlambatan'=>15,
 	),
 
 	'language'=>'id',
 	'theme'=>'abound',
+
 );

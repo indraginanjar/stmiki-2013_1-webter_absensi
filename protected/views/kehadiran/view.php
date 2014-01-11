@@ -13,6 +13,7 @@ $this->menu=array(
 	array('label'=>'Update Kehadiran', 'url'=>array('update', 'id'=>$model->id)),
 	array('label'=>'Delete Kehadiran', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 	array('label'=>'Manage Kehadiran', 'url'=>array('admin')),
+	array('label'=>'Kehadiran Perbulan', 'url'=>array('perbulan')),
 );
 ?>
 
