@@ -16,6 +16,7 @@
  */
 class Kehadiran extends CActiveRecord
 {
+
 	public $matakuliah_nama;
 	public $mahasiswa_nama;
 	public $mahasiswa_nim;
@@ -24,6 +25,10 @@ class Kehadiran extends CActiveRecord
 	public $perkuliahan_mulai;
 	public $keterangan;
 	public $lama_di_kelas;
+	public $bulan_tahun;
+	public $minggu;
+	public $bulan;
+	public $tahun;
 
 	/**
 	 * @return string the associated database table name
@@ -51,7 +56,11 @@ class Kehadiran extends CActiveRecord
 				mahasiswa_nim,
 				perkuliahan_tanggal,
 				perkuliahan_pertemuan,
-				perkuliahan_mulai
+				perkuliahan_mulai,
+				bulan_tahun,
+				minggu,
+				bulan,
+				tahun,
 				',
 				'safe', 'on'=>'search'),
 		);
@@ -88,6 +97,7 @@ class Kehadiran extends CActiveRecord
 			'mahasiswa_nim' => 'NIM',
 			'masuk' => 'Masuk',
 			'keluar' => 'Keluar',
+			'bulan_tahun' => 'Bulan',
 		);
 	}
 
@@ -109,11 +119,22 @@ class Kehadiran extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
+		$criteria->select = array('t.*',
+			'strftime("%W", perkuliahan.tanggal) + (1 - strftime("%W", strftime("%Y", perkuliahan.tanggal) || "-01-04")) as minggu',
+			'strftime("%M-%Y", perkuliahan.tanggal) as bulan_tahun',
+			'strftime("%m", perkuliahan.tanggal) as bulan',
+			'strftime("%Y", perkuliahan.tanggal) as tahun',
+			);
+		//$criteria->select = "t.*, (strftime('%W', perkuliahan.tanggal)) minggu";
+		//$criteria->select = array('t.*', 'concat(perkuliahan.tanggal, "gad") as minggu');
+		//$criteria->select = new CDbExpression('t.*, strftime("%W", perkuliahan.tanggal) + (1 - strftime("%W", strftime("%Y", perkuliahan.tanggal) || "-01-04")) as minggu');
+
 		$criteria->with = array(
 			'perkuliahan'=>array(),
 			'perkuliahan.matakuliah'=>array(),
 			'mahasiswa'=>array(),
 			);
+
 
 		$criteria->compare('id',$this->id, true);
 		$criteria->compare('perkuliahan_id',$this->perkuliahan_id, true);
@@ -127,9 +148,28 @@ class Kehadiran extends CActiveRecord
 		$criteria->compare('masuk',$this->masuk,true);
 		$criteria->compare('keluar',$this->keluar,true);
 		$criteria->compare('keterangan',$this->keterangan,true);
+		$criteria->compare('minggu',$this->minggu,true);
+		$criteria->compare('bulan',$this->bulan,true);
+		$criteria->compare('tahun',$this->tahun,true);
+
+		if(!empty($_POST['bulan_tahun']))
+		{
+			$bt = explode('-', $_POST['bulan_tahun']);
+			$criteria->condition = 'strftime("%Y", perkuliahan.tanggal) = :tahun and strftime("%m", perkuliahan.tanggal) = :bulan';
+			$criteria->params = array(':bulan'=>$bt[0], ':tahun'=>$bt[1]);
+		}
+		//if(isset($this->perkuliahan_tanggal)){
+		//		$tanggal = DateTime::createFromFormat('Y-m-d', $this->perkuliahan_tanggal);
+		//	$criteria->compare('bulan_tahun', $tanggal->format('m-Y'),true);
+		//}
+		$criteria->compare('bulan_tahun', $this->bulan_tahun);
+
+		$sort = new CSort;
+		$sort->attributes = array('*', 'tahun'=>array());
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'sort'=>$sort,
 		));
 	}
 
@@ -146,7 +186,6 @@ class Kehadiran extends CActiveRecord
 
 	protected function afterFind()
 	{
-		parent::afterFind();
 
 		$toleransi = Yii::app()->params['toleransiKeterlambatan'] * 60;
 
@@ -177,5 +216,9 @@ class Kehadiran extends CActiveRecord
 
 		//$this->lama_di_kelas = gmdate('H:i', strtotime($this->perkuliahan->selesai) -  strtotime($this->masuk));
 		$this->lama_di_kelas = $selesai->diff($masuk)->format('%H:%I');
+		$tanggal = DateTime::createFromFormat('Y-m-d', $this->perkuliahan->tanggal);
+		$this->bulan_tahun = $tanggal->format('m-Y');
+
+		parent::afterFind();
 	}
 }

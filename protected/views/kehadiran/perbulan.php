@@ -28,16 +28,23 @@ $('.search-form form').submit(function(){
 ?>
 
 <h1>Kehadiran Perbulan</h1>
-
-<form>
+<div class="form">
+<?php
+$form=$this->beginWidget('CActiveForm', array(
+	'id'=>'perkuliahan-form',
+	//'method'=>'get',
+		)
+	);
+?>
 	<div class="row">
-		<?php echo 'Bulan'; ?>
-		<?php // echo $form->textField($model,'tanggal'); ?>
+		<?php echo $form->labelEx($model,'perkuliahan_tanggal'); ?>
+		<?php // echo $form->textField($model, 'bulan_tahun'); ?>
 		<?php
 		$this->widget('zii.widgets.jui.CJuiDatePicker', array(
 			//'model' => $model,
-			//'attribute' => 'tanggal',
-			'name'=>'bulan',
+			//'attribute' => 'bulan_tahun_param',
+			'value'=>isset($_POST['bulan_tahun']) ? $_POST['bulan_tahun'] : '',
+			'name'=>'bulan_tahun',
 			'language' => 'id',
 			'options'=>array(
 				'dateFormat' => 'mm-yy',
@@ -47,12 +54,16 @@ $('.search-form form').submit(function(){
 			'htmlOptions' => array(
 				'size' => '10',         // textField size
 				'maxlength' => '10',    // textField maxlength
+				'val'=>isset($_POST['bulan_tahun']) ? $_POST['bulan_tahun'] : '',
 				),
 		));
 		?>
 	</div>
-</form>
-
+	<div class="row buttons">
+		<?php echo CHtml::submitButton('Set'); ?>
+	</div>
+<?php $this->endWidget(); ?>
+</div>
 <p>
 You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
 or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
@@ -83,8 +94,8 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 			'name'=>'mahasiswa.nama',
 			'filter'=>CHtml::activeTextField($model, 'mahasiswa_nama'),
 			),
-		'masuk',
-		'keluar',
+		'masuk:time',
+		'keluar:time',
 		'lama_di_kelas',
 		array(
 			'name'=>'keterangan',
