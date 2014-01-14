@@ -91,6 +91,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 			'header'=>'No.',
 			'value'=>'$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)',
 		      ),
+		'tahun_minggu',
 		array(
 			'name'=>'mahasiswa.nim',
 			'filter'=>CHtml::activeTextField($model, 'mahasiswa_nim'),
@@ -100,7 +101,16 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 			'name'=>'mahasiswa.nama',
 			'filter'=>CHtml::activeTextField($model, 'mahasiswa_nama'),
 			),
-		'tahun_minggu',
+		array(
+			'name'=>'perkuliahan.mulai',
+			'type'=>'time',
+			'filter'=>CHtml::activeTextField($model, 'perkuliahan_mulai'),
+			),
+		array(
+			'name'=>'perkuliahan.selesai',
+			'type'=>'time',
+			'filter'=>CHtml::activeTextField($model, 'perkuliahan_mulai'),
+			),
 		'masuk:time',
 		'keluar:time',
 		'lama_di_kelas',

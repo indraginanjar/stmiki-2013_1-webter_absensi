@@ -58,10 +58,13 @@ class Kehadiran extends CActiveRecord
 				perkuliahan_tanggal,
 				perkuliahan_pertemuan,
 				perkuliahan_mulai,
+				perkuliahan.mulai,
 				bulan_tahun,
 				bulan,
 				tahun,
 				tahun_minggu,
+				keterangan,
+				lama_di_kelas,
 				',
 				'safe', 'on'=>'search'),
 		);
@@ -120,11 +123,7 @@ class Kehadiran extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->select = array(
-			't.*',
-			'strftime("%W", perkuliahan.tanggal) + (1 - strftime("%W", strftime("%Y", perkuliahan.tanggal) || "-01-04")) as minggu',
-			'strftime("%Y", perkuliahan.tanggal) as tahun',
-			'(
+		$_tahun_minggu = '(
 				substr(
 					"0000" 
 					|| (
@@ -144,10 +143,27 @@ class Kehadiran extends CActiveRecord
 						,2
 						)
 					)
-				) as tahun_minggu',
-			'strftime("%M-%Y", perkuliahan.tanggal) as bulan_tahun',
-			'strftime("%m", perkuliahan.tanggal) as bulan',
-			'(
+				)
+			';
+		$_keterangan = 'case
+				when strftime("%s", perkuliahan.mulai) - strftime("%s", t.masuk) >= 0 
+					then 
+						case 
+							when strftime("%s", perkuliahan.selesai) - strftime("%s", t.keluar) <= 0 
+								then "Masuk tepat waktu, Keluar sesuai jadwal"
+							else
+								"Masuk tepat waktu, Keluar lebih awal"
+						end
+					else
+						case 
+							when strftime("%s", perkuliahan.selesai) - strftime("%s", t.keluar) <= 0 
+								then "Terlambat masuk, Keluar sesuai jadwal"
+							else
+								"Terlambat masuk, Keluar lebih awal"
+						end
+				end
+			';
+		$_lama_di_kelas = '(
 				substr(
 					"00" 
 					|| ((strftime("%s", t.keluar) - strftime("%s", t.masuk)) / 3600)
@@ -165,7 +181,17 @@ class Kehadiran extends CActiveRecord
 					, -2
 					, 2
 					)
-				) as lama_di_kelas',
+				)
+			';
+		$criteria->select = array(
+			't.*',
+			'strftime("%W", perkuliahan.tanggal) + (1 - strftime("%W", strftime("%Y", perkuliahan.tanggal) || "-01-04")) as minggu',
+			'strftime("%Y", perkuliahan.tanggal) as tahun',
+			$_tahun_minggu . ' as tahun_minggu',
+			'strftime("%M-%Y", perkuliahan.tanggal) as bulan_tahun',
+			'strftime("%m", perkuliahan.tanggal) as bulan',
+			$_lama_di_kelas . ' as lama_di_kelas',
+			$_keterangan . ' as keterangan',
 			);
 		//$criteria->select = "t.*, (strftime('%W', perkuliahan.tanggal)) minggu";
 		//$criteria->select = array('t.*', 'concat(perkuliahan.tanggal, "gad") as minggu');
@@ -189,7 +215,7 @@ class Kehadiran extends CActiveRecord
 		$criteria->compare('mahasiswa.nim',$this->mahasiswa_nim, true);
 		$criteria->compare('masuk',$this->masuk,true);
 		$criteria->compare('keluar',$this->keluar,true);
-		$criteria->compare('keterangan',$this->keterangan,true);
+		$criteria->compare($_keterangan, $this->keterangan,true);
 		$criteria->compare('bulan',$this->bulan,true);
 		$criteria->compare('tahun',$this->tahun,true);
 
@@ -206,13 +232,14 @@ class Kehadiran extends CActiveRecord
 		if(!empty($_POST['tahun_minggu']))
 		{
 			$time_param = explode('-', $_POST['tahun_minggu']);
-			$criteria->condition = '(strftime("%Y", perkuliahan.tanggal)) || "-" || (strftime("%W", perkuliahan.tanggal) + (1 - strftime("%W", strftime("%Y", perkuliahan.tanggal) || "-01-04"))) = :tahun_minggu';
+			$criteria->condition = $_tahun_minggu . ' = :tahun_minggu';
 			$criteria->params = array(
 				':tahun_minggu'=>$_POST['tahun_minggu'],
 				);
 		}
 		$criteria->compare('bulan_tahun', $this->bulan_tahun);
-		$criteria->compare('(strftime("%Y", perkuliahan.tanggal)) || "-" || (strftime("%W", perkuliahan.tanggal) + (1 - strftime("%W", strftime("%Y", perkuliahan.tanggal) || "-01-04")))', $this->tahun_minggu, true);
+		$criteria->compare($_tahun_minggu, $this->tahun_minggu, true);
+		$criteria->compare($_lama_di_kelas, $this->lama_di_kelas, true);
 
 		$sort = new CSort;
 		$sort->attributes = array(
@@ -250,7 +277,7 @@ class Kehadiran extends CActiveRecord
 		$selesai = DateTime::createFromFormat('H:i', $this->perkuliahan->selesai);
 		$masuk = DateTime::createFromFormat('H:i', $this->masuk);
 		$keluar = DateTime::createFromFormat('H:i', $this->keluar);
-
+		/*
 		$keterangan = array();
 		$diff = strtotime($this->perkuliahan->mulai) - strtotime($this->masuk);
 		if($diff > 0 - $toleransi) {
@@ -270,6 +297,7 @@ class Kehadiran extends CActiveRecord
 			$keterangan[] = "Keluar Lebih dulu";
 		}
 		$this->keterangan = implode(', ', $keterangan);
+		*/
 
 		$tanggal = DateTime::createFromFormat('Y-m-d', $this->perkuliahan->tanggal);
 		$this->bulan_tahun = $tanggal->format('m-Y');
