@@ -11,6 +11,7 @@ $this->menu=array(
 	array('label'=>'List Kehadiran', 'url'=>array('index')),
 	array('label'=>'Create Kehadiran', 'url'=>array('create')),
 	array('label'=>'Kehadiran Perbulan', 'url'=>array('perbulan')),
+	array('label'=>'Kehadiran Perminggu', 'url'=>array('perminggu')),
 );
 
 Yii::app()->clientScript->registerScript('search', "

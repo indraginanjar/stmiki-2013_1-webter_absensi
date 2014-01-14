@@ -16,6 +16,7 @@
  */
 class Kehadiran extends CActiveRecord
 {
+	private $_tahun_minggu;
 
 	public $matakuliah_nama;
 	public $mahasiswa_nama;
@@ -26,9 +27,9 @@ class Kehadiran extends CActiveRecord
 	public $keterangan;
 	public $lama_di_kelas;
 	public $bulan_tahun;
-	public $minggu;
 	public $bulan;
 	public $tahun;
+	public $tahun_minggu;
 
 	/**
 	 * @return string the associated database table name
@@ -58,9 +59,9 @@ class Kehadiran extends CActiveRecord
 				perkuliahan_pertemuan,
 				perkuliahan_mulai,
 				bulan_tahun,
-				minggu,
 				bulan,
 				tahun,
+				tahun_minggu,
 				',
 				'safe', 'on'=>'search'),
 		);
@@ -97,7 +98,7 @@ class Kehadiran extends CActiveRecord
 			'mahasiswa_nim' => 'NIM',
 			'masuk' => 'Masuk',
 			'keluar' => 'Keluar',
-			'bulan_tahun' => 'Bulan',
+			'bulan_tahun' => 'Bulan Tahun',
 		);
 	}
 
@@ -119,11 +120,52 @@ class Kehadiran extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->select = array('t.*',
+		$criteria->select = array(
+			't.*',
 			'strftime("%W", perkuliahan.tanggal) + (1 - strftime("%W", strftime("%Y", perkuliahan.tanggal) || "-01-04")) as minggu',
+			'strftime("%Y", perkuliahan.tanggal) as tahun',
+			'(
+				substr(
+					"0000" 
+					|| (
+						strftime("%Y", perkuliahan.tanggal)
+						)
+					, -4
+					,4
+					) 
+				|| "-" 
+				|| (
+					substr(
+						"00" 
+						|| (
+							strftime("%W", perkuliahan.tanggal) + (1 - strftime("%W", strftime("%Y", perkuliahan.tanggal) || "-01-04"))
+							)
+						, -2
+						,2
+						)
+					)
+				) as tahun_minggu',
 			'strftime("%M-%Y", perkuliahan.tanggal) as bulan_tahun',
 			'strftime("%m", perkuliahan.tanggal) as bulan',
-			'strftime("%Y", perkuliahan.tanggal) as tahun',
+			'(
+				substr(
+					"00" 
+					|| ((strftime("%s", t.keluar) - strftime("%s", t.masuk)) / 3600)
+					, -2
+					,2
+					)
+				)
+			|| ":" 
+			|| (
+				substr(
+					"00" 
+					|| (((strftime("%s", t.keluar) - strftime("%s", t.masuk)) / 60) 
+						- (((strftime("%s", t.keluar) - strftime("%s", t.masuk)) / 3600) * 60)
+						)
+					, -2
+					, 2
+					)
+				) as lama_di_kelas',
 			);
 		//$criteria->select = "t.*, (strftime('%W', perkuliahan.tanggal)) minggu";
 		//$criteria->select = array('t.*', 'concat(perkuliahan.tanggal, "gad") as minggu');
@@ -148,24 +190,39 @@ class Kehadiran extends CActiveRecord
 		$criteria->compare('masuk',$this->masuk,true);
 		$criteria->compare('keluar',$this->keluar,true);
 		$criteria->compare('keterangan',$this->keterangan,true);
-		$criteria->compare('minggu',$this->minggu,true);
 		$criteria->compare('bulan',$this->bulan,true);
 		$criteria->compare('tahun',$this->tahun,true);
 
 		if(!empty($_POST['bulan_tahun']))
 		{
-			$bt = explode('-', $_POST['bulan_tahun']);
+			$time_param = explode('-', $_POST['bulan_tahun']);
 			$criteria->condition = 'strftime("%Y", perkuliahan.tanggal) = :tahun and strftime("%m", perkuliahan.tanggal) = :bulan';
-			$criteria->params = array(':bulan'=>$bt[0], ':tahun'=>$bt[1]);
+			$criteria->params = array(
+				':bulan'=>$time_param[0],
+				':tahun'=>$time_param[1],
+				);
 		}
-		//if(isset($this->perkuliahan_tanggal)){
-		//		$tanggal = DateTime::createFromFormat('Y-m-d', $this->perkuliahan_tanggal);
-		//	$criteria->compare('bulan_tahun', $tanggal->format('m-Y'),true);
-		//}
+
+		if(!empty($_POST['tahun_minggu']))
+		{
+			$time_param = explode('-', $_POST['tahun_minggu']);
+			$criteria->condition = '(strftime("%Y", perkuliahan.tanggal)) || "-" || (strftime("%W", perkuliahan.tanggal) + (1 - strftime("%W", strftime("%Y", perkuliahan.tanggal) || "-01-04"))) = :tahun_minggu';
+			$criteria->params = array(
+				':tahun_minggu'=>$_POST['tahun_minggu'],
+				);
+		}
 		$criteria->compare('bulan_tahun', $this->bulan_tahun);
+		$criteria->compare('(strftime("%Y", perkuliahan.tanggal)) || "-" || (strftime("%W", perkuliahan.tanggal) + (1 - strftime("%W", strftime("%Y", perkuliahan.tanggal) || "-01-04")))', $this->tahun_minggu, true);
 
 		$sort = new CSort;
-		$sort->attributes = array('*', 'tahun'=>array());
+		$sort->attributes = array(
+			'*',
+			'mahasiswa.nim'=>array(),
+			'mahasiswa.nama'=>array(),
+			'lama_di_kelas'=>array(),
+			'tahun_minggu'=>array(),
+			'keterangan'=>array(),
+			);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -214,8 +271,6 @@ class Kehadiran extends CActiveRecord
 		}
 		$this->keterangan = implode(', ', $keterangan);
 
-		//$this->lama_di_kelas = gmdate('H:i', strtotime($this->perkuliahan->selesai) -  strtotime($this->masuk));
-		$this->lama_di_kelas = $selesai->diff($masuk)->format('%H:%I');
 		$tanggal = DateTime::createFromFormat('Y-m-d', $this->perkuliahan->tanggal);
 		$this->bulan_tahun = $tanggal->format('m-Y');
 

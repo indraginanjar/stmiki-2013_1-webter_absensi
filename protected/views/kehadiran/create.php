@@ -11,6 +11,7 @@ $this->menu=array(
 	array('label'=>'List Kehadiran', 'url'=>array('index')),
 	array('label'=>'Manage Kehadiran', 'url'=>array('admin')),
 	array('label'=>'Kehadiran Perbulan', 'url'=>array('perbulan')),
+	array('label'=>'Kehadiran Perminggu', 'url'=>array('perminggu')),
 );
 ?>
 

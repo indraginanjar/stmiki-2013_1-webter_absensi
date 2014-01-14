@@ -28,7 +28,7 @@ class KehadiranController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view', 'perbulan'),
+				'actions'=>array('index','view', 'perbulan', 'perminggu'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -179,6 +179,18 @@ class KehadiranController extends Controller
 			$model->attributes=$_GET['Kehadiran'];
 
 		$this->render('perbulan',array(
+			'model'=>$model,
+		));
+	}
+
+	public function actionPerminggu()
+	{
+		$model=new Kehadiran('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Kehadiran']))
+			$model->attributes=$_GET['Kehadiran'];
+
+		$this->render('perminggu',array(
 			'model'=>$model,
 		));
 	}
