@@ -87,15 +87,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		//'no',
 		'number',
-/*
-		array(
-			'header'=>'No.',
-			'name'=>'number',
-			//'value'=>'$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)',
-		      ),
-*/
 		'tahun_minggu',
 		array(
 			'name'=>'mahasiswa.nim',

@@ -17,8 +17,6 @@
 class Kehadiran extends CActiveRecord
 {
 	private $tahun_minggu_select;
-	private $_no;
-
 
 	public $matakuliah_nama;
 	public $mahasiswa_nama;
@@ -291,49 +289,8 @@ class Kehadiran extends CActiveRecord
 		$selesai = DateTime::createFromFormat('H:i', $this->perkuliahan->selesai);
 		$masuk = DateTime::createFromFormat('H:i', $this->masuk);
 		$keluar = DateTime::createFromFormat('H:i', $this->keluar);
-		/*
-		$keterangan = array();
-		$diff = strtotime($this->perkuliahan->mulai) - strtotime($this->masuk);
-		if($diff > 0 - $toleransi) {
-			$keterangan[] = "Masuk Tepat Waktu";
-		}
-		else
-		{
-			$keterangan[] = "Terlambat";
-		}
-		$diff = strtotime($this->perkuliahan->selesai) - strtotime($this->keluar);
-		if($diff > 0)
-		{
-			$keterangan[] = "Keluar Sesuai Jadwal";
-		}
-		else
-		{
-			$keterangan[] = "Keluar Lebih dulu";
-		}
-		$this->keterangan = implode(', ', $keterangan);
-		*/
-
 		$tanggal = DateTime::createFromFormat('Y-m-d', $this->perkuliahan->tanggal);
 		$this->bulan_tahun = $tanggal->format('m-Y');
-		$this->_no += 1;
-		//$this->no = $this->no;
 		parent::afterFind();
 	}
-/*
-	public function attributeNames()
-	{
-	    return array_merge(parent::attributeNames(), array('no'));
-	}
-*/
-/*
-	public function setNo()
-	{
-	}
-
-	public function getNo()
-	{
-		$this->_no += 1;
-		return $this->_no;
-	}
-*/
 }
