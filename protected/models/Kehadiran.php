@@ -16,7 +16,9 @@
  */
 class Kehadiran extends CActiveRecord
 {
-	private $_tahun_minggu;
+	private $tahun_minggu_select;
+	private $_no;
+
 
 	public $matakuliah_nama;
 	public $mahasiswa_nama;
@@ -30,6 +32,7 @@ class Kehadiran extends CActiveRecord
 	public $bulan;
 	public $tahun;
 	public $tahun_minggu;
+	public $number;
 
 	/**
 	 * @return string the associated database table name
@@ -65,6 +68,7 @@ class Kehadiran extends CActiveRecord
 				tahun_minggu,
 				keterangan,
 				lama_di_kelas,
+				number,
 				',
 				'safe', 'on'=>'search'),
 		);
@@ -102,6 +106,7 @@ class Kehadiran extends CActiveRecord
 			'masuk' => 'Masuk',
 			'keluar' => 'Keluar',
 			'bulan_tahun' => 'Bulan Tahun',
+			'number' => 'No',
 		);
 	}
 
@@ -123,7 +128,13 @@ class Kehadiran extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$_tahun_minggu = '(
+		$number_select = '(
+				select count(*)
+				from tbl_kehadiran
+				where tbl_kehadiran.id <= t.id
+			)';
+
+		$tahun_minggu_select = '(
 				substr(
 					"0000" 
 					|| (
@@ -145,7 +156,7 @@ class Kehadiran extends CActiveRecord
 					)
 				)
 			';
-		$_keterangan = 'case
+		$keterangan_select = 'case
 				when strftime("%s", perkuliahan.mulai) - strftime("%s", t.masuk) >= 0 
 					then 
 						case 
@@ -163,7 +174,7 @@ class Kehadiran extends CActiveRecord
 						end
 				end
 			';
-		$_lama_di_kelas = '(
+		$lama_di_kelas_select = '(
 				substr(
 					"00" 
 					|| ((strftime("%s", t.keluar) - strftime("%s", t.masuk)) / 3600)
@@ -184,14 +195,15 @@ class Kehadiran extends CActiveRecord
 				)
 			';
 		$criteria->select = array(
+			$number_select . ' as number',
 			't.*',
 			'strftime("%W", perkuliahan.tanggal) + (1 - strftime("%W", strftime("%Y", perkuliahan.tanggal) || "-01-04")) as minggu',
 			'strftime("%Y", perkuliahan.tanggal) as tahun',
-			$_tahun_minggu . ' as tahun_minggu',
+			$tahun_minggu_select . ' as tahun_minggu',
 			'strftime("%M-%Y", perkuliahan.tanggal) as bulan_tahun',
 			'strftime("%m", perkuliahan.tanggal) as bulan',
-			$_lama_di_kelas . ' as lama_di_kelas',
-			$_keterangan . ' as keterangan',
+			$lama_di_kelas_select . ' as lama_di_kelas',
+			$keterangan_select . ' as keterangan',
 			);
 		//$criteria->select = "t.*, (strftime('%W', perkuliahan.tanggal)) minggu";
 		//$criteria->select = array('t.*', 'concat(perkuliahan.tanggal, "gad") as minggu');
@@ -215,9 +227,10 @@ class Kehadiran extends CActiveRecord
 		$criteria->compare('mahasiswa.nim',$this->mahasiswa_nim, true);
 		$criteria->compare('masuk',$this->masuk,true);
 		$criteria->compare('keluar',$this->keluar,true);
-		$criteria->compare($_keterangan, $this->keterangan,true);
+		$criteria->compare($keterangan_select, $this->keterangan,true);
 		$criteria->compare('bulan',$this->bulan,true);
 		$criteria->compare('tahun',$this->tahun,true);
+		$criteria->compare($number_select,$this->number,true);
 
 		if(!empty($_POST['bulan_tahun']))
 		{
@@ -232,14 +245,14 @@ class Kehadiran extends CActiveRecord
 		if(!empty($_POST['tahun_minggu']))
 		{
 			$time_param = explode('-', $_POST['tahun_minggu']);
-			$criteria->condition = $_tahun_minggu . ' = :tahun_minggu';
+			$criteria->condition = $tahun_minggu_select . ' = :tahun_minggu';
 			$criteria->params = array(
 				':tahun_minggu'=>$_POST['tahun_minggu'],
 				);
 		}
 		$criteria->compare('bulan_tahun', $this->bulan_tahun);
-		$criteria->compare($_tahun_minggu, $this->tahun_minggu, true);
-		$criteria->compare($_lama_di_kelas, $this->lama_di_kelas, true);
+		$criteria->compare($tahun_minggu_select, $this->tahun_minggu, true);
+		$criteria->compare($lama_di_kelas_select, $this->lama_di_kelas, true);
 
 		$sort = new CSort;
 		$sort->attributes = array(
@@ -249,6 +262,7 @@ class Kehadiran extends CActiveRecord
 			'lama_di_kelas'=>array(),
 			'tahun_minggu'=>array(),
 			'keterangan'=>array(),
+			'number'=>array(),
 			);
 
 		return new CActiveDataProvider($this, array(
@@ -301,7 +315,25 @@ class Kehadiran extends CActiveRecord
 
 		$tanggal = DateTime::createFromFormat('Y-m-d', $this->perkuliahan->tanggal);
 		$this->bulan_tahun = $tanggal->format('m-Y');
-
+		$this->_no += 1;
+		//$this->no = $this->no;
 		parent::afterFind();
 	}
+/*
+	public function attributeNames()
+	{
+	    return array_merge(parent::attributeNames(), array('no'));
+	}
+*/
+/*
+	public function setNo()
+	{
+	}
+
+	public function getNo()
+	{
+		$this->_no += 1;
+		return $this->_no;
+	}
+*/
 }
