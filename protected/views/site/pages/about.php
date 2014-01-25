@@ -13,7 +13,7 @@ $this->breadcrumbs=array(
         </div>
          <fieldset>
             <p>
-                Tugas kelompok matakuliah Web Terapan jelang ujian tengah semester tahun akademik 20131.
+                Tugas Akhir Web Terapan Semester Ganjil Tahun Akademik 2013/2014.
             </p>
             <h4>Anggota Kelompok IV : </h4>
             <div id="accordion">
@@ -28,7 +28,9 @@ $this->breadcrumbs=array(
                         </p>
                     </div>
                     <div clas="text-wrap">
-
+                        <p>
+                            Iseng-iseng berhadiah :p.
+                        </p>
                     </div>
 
                 </div>
