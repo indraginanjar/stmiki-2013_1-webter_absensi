@@ -55,13 +55,14 @@
 			'attribute' => 'tanggal',
 			'language' => 'id',
 			'options'=>array(
-				'dateFormat' => 'mm-yy',
+				'dateFormat' => 'yy-mm-dd',
 				'showOtherMonths' =>true,
 				'selectOtherMonths' =>true,
 				),
 			'htmlOptions' => array(
-				'size' => '10',         // textField size
+				//'size' => '10',         // textField size
 				'maxlength' => '10',    // textField maxlength
+				'placeholder'=>'yyyy-MM-dd',
 				),
 		));
 		?>
