@@ -37,47 +37,26 @@ $form=$this->beginWidget('CActiveForm', array(
 		)
 	);
 ?>
-	<div class="row">
-		<?php echo $form->label($model,'matakuliah_nama'); ?>
-		<?php //echo $form->textField($model,'matakuliah_nama'); ?>
-		<?php
-			$this->widget('zii.widgets.jui.CJuiAutoComplete',array(
-				'model'=>$model,
-				'attribute'=>'matakuliah_nama',
-			    	'name'=> get_class($model).'[matakuliah_nama]',
-			    	'source'=>$this->createUrl('matakuliah/jsonNamaAutoComplete'),
-			    	// additional javascript options for the autocomplete plugin
-			    	//'options'=>array(
-				//	'minLength'=>'1',
-			    	//),
-			    	'htmlOptions'=>array(
-					'style'=>'height:20px;',
-			    	),
-			));
-		?>
-		<?php echo $form->error($model,'matakuliah_nama'); ?>
-	</div>
-	<div class="row">
-		<?php echo $form->label($model,'tahun_bulan'); ?>
-		<?php //echo $form->textField($model,'tahun_bulan', array('placeholder'=>'yyyy-M')); ?>
-		<?php
-		$this->widget('zii.widgets.jui.CJuiDatePicker', array(
-			'model' => $model,
-			'attribute' => 'tahun_bulan',
-			'language' => 'id',
-			'options'=>array(
-				'dateFormat' => 'yy-mm',
-				'showOtherMonths' =>true,
-				'selectOtherMonths' =>true,
-				),
-			'htmlOptions' => array(
-				//'size' => '10',         // textField size
-				'maxlength' => '10',    // textField maxlength
-				'placeholder' => 'yyyy-MM',
-				),
-		));
-		?>
-	</div>
+
+<?php 
+$this->renderPartial('_tahun_bulan_autocomplete',
+	array(
+		'model'=>$model,
+		'form'=>$form,
+		'id'=>'perbulan',
+	)
+);
+?>
+
+<?php 
+$this->renderPartial('_matakuliah_nama_autocomplete',
+	array(
+		'model'=>$model,
+		'form'=>$form,
+		'id'=>'perbulan',
+	)
+);
+?>
 	<div class="row buttons">
 		<?php echo CHtml::submitButton('Set'); ?>
 	</div>
