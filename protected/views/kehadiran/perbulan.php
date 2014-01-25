@@ -82,10 +82,8 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		array(
-			'header'=>'No.',
-			'value'=>'$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)',
-		      ),
+		'number:number',
+		'tahun_bulan',
 		array(
 			'name'=>'mahasiswa.nim',
 			'filter'=>CHtml::activeTextField($model, 'mahasiswa_nim'),
@@ -95,6 +93,8 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 			'name'=>'mahasiswa.nama',
 			'filter'=>CHtml::activeTextField($model, 'mahasiswa_nama'),
 			),
+		'perkuliahan.mulai:time',
+		'perkuliahan.selesai:time',
 		'masuk:time',
 		'keluar:time',
 		'lama_di_kelas',

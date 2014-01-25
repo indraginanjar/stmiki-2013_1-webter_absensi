@@ -30,6 +30,7 @@ class Kehadiran extends CActiveRecord
 	public $bulan;
 	public $tahun;
 	public $tahun_minggu;
+	public $tahun_bulan;
 	public $number;
 
 	/**
@@ -154,28 +155,58 @@ class Kehadiran extends CActiveRecord
 					)
 				)
 			';
+
+		$tahun_bulan_select = '(
+				substr(
+					"0000" 
+					|| (
+						strftime("%Y", perkuliahan.tanggal)
+						)
+					, -4
+					,4
+					) 
+				|| "-" 
+				|| (
+					substr(
+						"00" 
+						|| (
+							strftime("%m", perkuliahan.tanggal)
+							)
+						, -2
+						,2
+						)
+					)
+				)
+			';
+
 		$keterangan_select = 'case
 				when strftime("%s", perkuliahan.mulai) - strftime("%s", t.masuk) >= 0 
 					then 
 						case 
+							when strftime("%s", perkuliahan.mulai) - strftime("%s", t.keluar) > 0 
+								then "Datang lebih dulu, Tidak masuk kuliah"
 							when strftime("%s", perkuliahan.selesai) - strftime("%s", t.keluar) <= 0 
 								then "Masuk tepat waktu, Keluar sesuai jadwal"
-							else
-								"Masuk tepat waktu, Keluar lebih awal"
+						else
+							"Masuk tepat waktu, Keluar lebih awal"
 						end
+				else
+					case 
+						when strftime("%s", perkuliahan.selesai) - strftime("%s", t.masuk) < 0 
+							then "Terlambat masuk, Tidak masuk kuliah"
+						when strftime("%s", perkuliahan.selesai) - strftime("%s", t.keluar) >= 0 
+							then "Terlambat masuk, Keluar sesuai jadwal"
 					else
-						case 
-							when strftime("%s", perkuliahan.selesai) - strftime("%s", t.keluar) <= 0 
-								then "Terlambat masuk, Keluar sesuai jadwal"
-							else
-								"Terlambat masuk, Keluar lebih awal"
-						end
+						"Terlambat masuk, Keluar lebih awal"
+					end
 				end
 			';
+//		$lama_di_kelas_select = 't.keluar - perkuliahan.mulai';
+
 		$lama_di_kelas_select = '(
 				substr(
 					"00" 
-					|| ((strftime("%s", t.keluar) - strftime("%s", t.masuk)) / 3600)
+					|| ((strftime("%s", t.keluar) - strftime("%s", perkuliahan.mulai)) / 3600)
 					, -2
 					,2
 					)
@@ -184,20 +215,20 @@ class Kehadiran extends CActiveRecord
 			|| (
 				substr(
 					"00" 
-					|| (((strftime("%s", t.keluar) - strftime("%s", t.masuk)) / 60) 
-						- (((strftime("%s", t.keluar) - strftime("%s", t.masuk)) / 3600) * 60)
-						)
+					|| (((strftime("%s", t.keluar) - strftime("%s", perkuliahan.mulai)) / 60) % 60)
 					, -2
 					, 2
 					)
 				)
 			';
+
 		$criteria->select = array(
 			$number_select . ' as number',
 			't.*',
 			'strftime("%W", perkuliahan.tanggal) + (1 - strftime("%W", strftime("%Y", perkuliahan.tanggal) || "-01-04")) as minggu',
 			'strftime("%Y", perkuliahan.tanggal) as tahun',
 			$tahun_minggu_select . ' as tahun_minggu',
+			$tahun_bulan_select . ' as tahun_bulan',
 			'strftime("%M-%Y", perkuliahan.tanggal) as bulan_tahun',
 			'strftime("%m", perkuliahan.tanggal) as bulan',
 			$lama_di_kelas_select . ' as lama_di_kelas',
@@ -229,6 +260,7 @@ class Kehadiran extends CActiveRecord
 		$criteria->compare('bulan',$this->bulan,true);
 		$criteria->compare('tahun',$this->tahun,true);
 		$criteria->compare($number_select,$this->number,true);
+		$criteria->compare($tahun_bulan_select,$this->tahun_bulan,true);
 
 		if(!empty($_POST['bulan_tahun']))
 		{
@@ -284,13 +316,14 @@ class Kehadiran extends CActiveRecord
 	{
 
 		$toleransi = Yii::app()->params['toleransiKeterlambatan'] * 60;
-
+/*
 		$mulai = DateTime::createFromFormat('H:i', $this->perkuliahan->mulai);
 		$selesai = DateTime::createFromFormat('H:i', $this->perkuliahan->selesai);
 		$masuk = DateTime::createFromFormat('H:i', $this->masuk);
 		$keluar = DateTime::createFromFormat('H:i', $this->keluar);
-		$tanggal = DateTime::createFromFormat('Y-m-d', $this->perkuliahan->tanggal);
+		//$tanggal = DateTime::createFromFormat('Y-m-d', $this->perkuliahan->tanggal);
 		$this->bulan_tahun = $tanggal->format('m-Y');
+*/
 		parent::afterFind();
 	}
 }
