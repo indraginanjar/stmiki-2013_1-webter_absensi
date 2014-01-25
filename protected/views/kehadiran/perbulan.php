@@ -33,29 +33,47 @@ $('.search-form form').submit(function(){
 <?php
 $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'perkuliahan-form',
-	//'method'=>'get',
+	'method'=>'get',
 		)
 	);
 ?>
 	<div class="row">
-		<?php echo $form->labelEx($model,'perkuliahan_tanggal'); ?>
-		<?php // echo $form->textField($model, 'bulan_tahun'); ?>
+		<?php echo $form->label($model,'matakuliah_nama'); ?>
+		<?php //echo $form->textField($model,'matakuliah_nama'); ?>
+		<?php
+			$this->widget('zii.widgets.jui.CJuiAutoComplete',array(
+				'model'=>$model,
+				'attribute'=>'matakuliah_nama',
+			    	'name'=> get_class($model).'[matakuliah_nama]',
+			    	'source'=>$this->createUrl('matakuliah/jsonNamaAutoComplete'),
+			    	// additional javascript options for the autocomplete plugin
+			    	//'options'=>array(
+				//	'minLength'=>'1',
+			    	//),
+			    	'htmlOptions'=>array(
+					'style'=>'height:20px;',
+			    	),
+			));
+		?>
+		<?php echo $form->error($model,'matakuliah_nama'); ?>
+	</div>
+	<div class="row">
+		<?php echo $form->label($model,'tahun_bulan'); ?>
+		<?php //echo $form->textField($model,'tahun_bulan', array('placeholder'=>'yyyy-M')); ?>
 		<?php
 		$this->widget('zii.widgets.jui.CJuiDatePicker', array(
-			//'model' => $model,
-			//'attribute' => 'bulan_tahun_param',
-			'value'=>isset($_POST['bulan_tahun']) ? $_POST['bulan_tahun'] : '',
-			'name'=>'bulan_tahun',
+			'model' => $model,
+			'attribute' => 'tahun_bulan',
 			'language' => 'id',
 			'options'=>array(
-				'dateFormat' => 'mm-yy',
+				'dateFormat' => 'yy-mm',
 				'showOtherMonths' =>true,
 				'selectOtherMonths' =>true,
 				),
 			'htmlOptions' => array(
-				'size' => '10',         // textField size
+				//'size' => '10',         // textField size
 				'maxlength' => '10',    // textField maxlength
-				'val'=>isset($_POST['bulan_tahun']) ? $_POST['bulan_tahun'] : '',
+				'placeholder' => 'yyyy-MM',
 				),
 		));
 		?>
@@ -93,8 +111,16 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 			'name'=>'mahasiswa.nama',
 			'filter'=>CHtml::activeTextField($model, 'mahasiswa_nama'),
 			),
-		'perkuliahan.mulai:time',
-		'perkuliahan.selesai:time',
+		array(
+			'name'=>'perkuliahan.mulai',
+			'type'=>'time',
+			'filter'=>CHtml::activeTextField($model, 'perkuliahan_mulai'),
+			),
+		array(
+			'name'=>'perkuliahan.selesai',
+			'type'=>'time',
+			'filter'=>CHtml::activeTextField($model, 'perkuliahan_selesai'),
+			),
 		'masuk:time',
 		'keluar:time',
 		'lama_di_kelas',
@@ -102,5 +128,8 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 			'name'=>'keterangan',
 			'header'=>'Keterangan',
 			),
+		array(
+			'class'=>'CButtonColumn',
+		),
 	),
 )); ?>

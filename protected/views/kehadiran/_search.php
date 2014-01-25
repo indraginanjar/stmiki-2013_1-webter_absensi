@@ -58,8 +58,6 @@
 		$this->widget('zii.widgets.jui.CJuiDatePicker', array(
 			'model' => $model,
 			'attribute' => 'tahun_bulan',
-			//'value'=>isset($_POST['tahun_bulan']) ? $_POST['tahun_bulan'] : '',
-			//'name'=>'bulan_tahun',
 			'language' => 'id',
 			'options'=>array(
 				'dateFormat' => 'yy-mm',
@@ -70,7 +68,6 @@
 				//'size' => '10',         // textField size
 				'maxlength' => '10',    // textField maxlength
 				'placeholder' => 'yyyy-MM',
-				'val'=>isset($_POST['tahun_bulan']) ? $_POST['tahun_bulan'] : '',
 				),
 		));
 		?>
@@ -83,8 +80,6 @@
 		$this->widget('zii.widgets.jui.CJuiDatePicker', array(
 			'model' => $model,
 			'attribute' => 'tahun_minggu',
-			//'value'=>isset($_POST['tahun_minggu']) ? $_POST['tahun_minggu'] : '',
-			//'name'=>'tahun_minggu',
 			'language' => 'id',
 			'options'=>array(
 				//`'dateFormat' => 'w-yy',
@@ -99,7 +94,6 @@
 			'htmlOptions' => array(
 				//'size' => '20',         // textField size
 				'maxlength' => '10',    // textField maxlength
-				'val'=>isset($_POST['tahun_minggu']) ? $_POST['tahun_minggu'] : '',
 				'placeholder'=>'yyyy-W',
 				),
 		));
