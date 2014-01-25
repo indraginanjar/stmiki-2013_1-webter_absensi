@@ -33,38 +33,30 @@ $('.search-form form').submit(function(){
 <?php
 $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'perkuliahan-form',
-	//'method'=>'get',
+	'method'=>'get',
 		)
 	);
 ?>
-	<div class="row">
-		<?php echo $form->labelEx($model,'tahun_minggu'); ?>
-		<?php
-		$this->widget('zii.widgets.jui.CJuiDatePicker', array(
-			//'model' => $model,
-			//'attribute' => 'bulan_tahun_param',
-			'value'=>isset($_POST['tahun_minggu']) ? $_POST['tahun_minggu'] : '',
-			'name'=>'tahun_minggu',
-			'language' => 'id',
-			'options'=>array(
-				//`'dateFormat' => 'w-yy',
-				//'dateFormat' => 'yy-mm-dd',
-				'showWeek'=>true,
-				'showOtherMonths' =>true,
-				'selectOtherMonths' =>true,
-				'onSelect'=> 'js:function(dateText, inst) {
-					$(this).val( $.datepicker.formatDate("yy-", $(this).datepicker("getDate")) + $.datepicker.iso8601Week($(this).datepicker("getDate")));
-					}',
-				),
-			'htmlOptions' => array(
-				'size' => '20',         // textField size
-				'maxlength' => '10',    // textField maxlength
-				'val'=>isset($_POST['tahun_minggu']) ? $_POST['tahun_minggu'] : '',
-				'placeholder'=>'yyyy-w',
-				),
-		));
-		?>
-	</div>
+<?php 
+$this->renderPartial('_tahun_minggu_datepicker',
+	array(
+		'model'=>$model,
+		'form'=>$form,
+		'id'=>'perminggu',
+	)
+);
+?>
+
+<?php 
+$this->renderPartial('_matakuliah_nama_autocomplete',
+	array(
+		'model'=>$model,
+		'form'=>$form,
+		'id'=>'perminggu',
+	)
+);
+?>
+
 	<div class="row buttons">
 		<?php echo CHtml::submitButton('Set'); ?>
 	</div>

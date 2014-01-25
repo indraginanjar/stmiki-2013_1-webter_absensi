@@ -51,32 +51,15 @@ $this->renderPartial('_tahun_bulan_autocomplete',
 );
 ?>
 
-	<div class="row">
-		<?php echo $form->label($model,'tahun_minggu'); ?>
-		<?php //echo $form->textField($model,'tahun_minggu', array('placeholder'=>'yyyy-W')); ?>
-		<?php
-		$this->widget('zii.widgets.jui.CJuiDatePicker', array(
-			'model' => $model,
-			'attribute' => 'tahun_minggu',
-			'language' => 'id',
-			'options'=>array(
-				//`'dateFormat' => 'w-yy',
-				//'dateFormat' => 'yy-mm-dd',
-				'showWeek'=>true,
-				'showOtherMonths' =>true,
-				'selectOtherMonths' =>true,
-				'onSelect'=> 'js:function(dateText, inst) {
-					$(this).val( $.datepicker.formatDate("yy-", $(this).datepicker("getDate")) + ("00" + $.datepicker.iso8601Week($(this).datepicker("getDate"))).slice(-2));
-					}',
-				),
-			'htmlOptions' => array(
-				//'size' => '20',         // textField size
-				'maxlength' => '10',    // textField maxlength
-				'placeholder'=>'yyyy-W',
-				),
-		));
-		?>
-	</div>
+<?php 
+$this->renderPartial('_tahun_minggu_datepicker',
+	array(
+		'model'=>$model,
+		'form'=>$form,
+		'id'=>'search',
+	)
+);
+?>
 
 	<div class="row">
 		<?php echo $form->label($model,'perkuliahan_tanggal'); ?>
