@@ -113,6 +113,7 @@ class Kehadiran extends CActiveRecord
 			'bulan_tahun' => 'Bulan Tahun',
 			'number' => 'No',
 			'matakuliah_nama' => 'Nama Matakuliah',
+			'lama_di_kelas' => 'Di kelas',
 		);
 	}
 
