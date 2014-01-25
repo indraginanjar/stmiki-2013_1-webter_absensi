@@ -39,7 +39,7 @@ $form=$this->beginWidget('CActiveForm', array(
 ?>
 
 <?php 
-$this->renderPartial('_tahun_bulan_autocomplete',
+$this->renderPartial('_tahun_bulan_datepicker',
 	array(
 		'model'=>$model,
 		'form'=>$form,

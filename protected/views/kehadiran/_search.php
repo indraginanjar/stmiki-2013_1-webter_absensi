@@ -42,7 +42,7 @@ $this->renderPartial('_matakuliah_nama_autocomplete',
 	</div>
 
 <?php 
-$this->renderPartial('_tahun_bulan_autocomplete',
+$this->renderPartial('_tahun_bulan_datepicker',
 	array(
 		'model'=>$model,
 		'form'=>$form,
