@@ -48,16 +48,15 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'filter'=>$model,
 	'columns'=>array(
 		'id',
-		'perkuliahan_id',
+		array(
+			'name'=>'perkuliahan.matakuliah.nama',
+			'header'=>'Matakuliah',
+			'filter'=>CHtml::activeTextField($model, 'matakuliah_nama'),
+			),
 		array(
 			'name'=>'perkuliahan.pertemuan',
 			//'value'=>'$data->perkuliahan->pertemuan',
 			'filter'=>CHtml::activeTextField($model, 'perkuliahan_pertemuan'),
-			),
-		array(
-			//'name'=>'perkuliahan.matakuliah.nama',
-			'name'=>'perkuliahan.matakuliah.nama',
-			'filter'=>CHtml::activeTextField($model, 'matakuliah_nama'),
 			),
 		array(
 			'name'=>'perkuliahan.tanggal',
@@ -67,14 +66,13 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 			'name'=>'perkuliahan.mulai',
 			'filter'=>CHtml::activeTextField($model, 'perkuliahan_mulai'),
 			),
-		'mahasiswa_id',
 		array(
 			'name'=>'mahasiswa.nim',
 			'filter'=>CHtml::activeTextField($model, 'mahasiswa_nim'),
 			),
 		array(
 			'name'=>'mahasiswa.nama',
-			'header'=>'Nama Mahasiswa',
+			'header'=>'Nama',
 			'filter'=>CHtml::activeTextField($model, 'mahasiswa_nama'),
 			),
 		'masuk',
@@ -85,6 +83,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 			),
 		array(
 			'name'=>'lama_di_kelas',
+			'header'=>'Di kelas',
 			),
 		array(
 			'class'=>'CButtonColumn',
