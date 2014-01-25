@@ -35,6 +35,8 @@ class MatakuliahController extends Controller
 				'actions'=>array('create'
 						,'update'
 						,'jsonAutoComplete'
+						,'jsonIdAutoComplete'
+						,'jsonNamaAutoComplete'
 						),
 				'users'=>array('@'),
 			),
@@ -185,6 +187,38 @@ class MatakuliahController extends Controller
 		foreach($collection as $item){
 			$option = new stdClass();
 			$option->label = $item->attributes['nama'] . ' | ' . $item->attributes['id'];
+			$option->value = $item->attributes['id'];
+			$source[] = $option;
+		}
+		echo json_encode($source);
+	}
+
+	public function actionJsonNamaAutoComplete($term = null)
+	{
+		$criteria = new CDbCriteria;
+		$criteria->addSearchCondition('nama', $term, true);
+		$criteria->limit = 50;
+		$collection = Matakuliah::model()->findAll($criteria);
+		$source = array();
+		foreach($collection as $item){
+			$option = new stdClass();
+			$option->label = $item->attributes['nama'];
+			$option->value = $item->attributes['nama'];
+			$source[] = $option;
+		}
+		echo json_encode($source);
+	}
+
+	public function actionJsonIdAutoComplete($term = null)
+	{
+		$criteria = new CDbCriteria;
+		$criteria->addSearchCondition('id', $term, true);
+		$criteria->limit = 50;
+		$collection = Matakuliah::model()->findAll($criteria);
+		$source = array();
+		foreach($collection as $item){
+			$option = new stdClass();
+			$option->label = $item->attributes['id'];
 			$option->value = $item->attributes['id'];
 			$source[] = $option;
 		}

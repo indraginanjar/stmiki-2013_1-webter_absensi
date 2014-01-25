@@ -18,12 +18,14 @@ class Kehadiran extends CActiveRecord
 {
 	private $tahun_minggu_select;
 
+	public $matakuliah_id;
 	public $matakuliah_nama;
 	public $mahasiswa_nama;
 	public $mahasiswa_nim;
 	public $perkuliahan_tanggal;
 	public $perkuliahan_pertemuan;
 	public $perkuliahan_mulai;
+	public $perkuliahan_selesai;
 	public $keterangan;
 	public $lama_di_kelas;
 	public $bulan_tahun;
@@ -54,17 +56,20 @@ class Kehadiran extends CActiveRecord
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, perkuliahan_id, mahasiswa_id, masuk, keluar,
+				matakuliah_id,
 				matakuliah_nama,
 				mahasiswa_nama,
 				mahasiswa_nim,
 				perkuliahan_tanggal,
 				perkuliahan_pertemuan,
 				perkuliahan_mulai,
+				perkuliahan_selesai,
 				perkuliahan.mulai,
 				bulan_tahun,
 				bulan,
 				tahun,
 				tahun_minggu,
+				tahun_bulan,
 				keterangan,
 				lama_di_kelas,
 				number,
@@ -94,7 +99,8 @@ class Kehadiran extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'perkuliahan_id' => 'Perkuliahan',
-			'perkuliahan.matakuliah.nama' => 'Matakuliah',
+			'perkuliahan.matakuliah.id' => 'Matakuliah',
+			'perkuliahan.matakuliah.nama' => 'Nama Matakuliah',
 			'perkuliahan.pertemuan' => 'Pertemuan',
 			'perkuliahan_pertemuan' => 'Pertemuan',
 			'perkuliahan_tanggal' => 'Tanggal',
@@ -250,6 +256,8 @@ class Kehadiran extends CActiveRecord
 		$criteria->compare('perkuliahan.pertemuan',$this->perkuliahan_pertemuan, true);
 		$criteria->compare('perkuliahan.tanggal',$this->perkuliahan_tanggal, true);
 		$criteria->compare('perkuliahan.mulai',$this->perkuliahan_mulai, true);
+		$criteria->compare('perkuliahan.selesai',$this->perkuliahan_selesai, true);
+		$criteria->compare('perkuliahan.matakuliah.id',$this->matakuliah_id, true);
 		$criteria->compare('perkuliahan.matakuliah.nama',$this->matakuliah_nama, true);
 		$criteria->compare('mahasiswa_id',$this->mahasiswa_id, true);
 		$criteria->compare('mahasiswa.nama',$this->mahasiswa_nama, true);
@@ -261,6 +269,9 @@ class Kehadiran extends CActiveRecord
 		$criteria->compare('tahun',$this->tahun,true);
 		$criteria->compare($number_select,$this->number,true);
 		$criteria->compare($tahun_bulan_select,$this->tahun_bulan,true);
+		$criteria->compare('bulan_tahun', $this->bulan_tahun);
+		$criteria->compare($tahun_minggu_select, $this->tahun_minggu, true);
+		$criteria->compare($lama_di_kelas_select, $this->lama_di_kelas, true);
 
 		if(!empty($_POST['bulan_tahun']))
 		{
@@ -280,9 +291,6 @@ class Kehadiran extends CActiveRecord
 				':tahun_minggu'=>$_POST['tahun_minggu'],
 				);
 		}
-		$criteria->compare('bulan_tahun', $this->bulan_tahun);
-		$criteria->compare($tahun_minggu_select, $this->tahun_minggu, true);
-		$criteria->compare($lama_di_kelas_select, $this->lama_di_kelas, true);
 
 		$sort = new CSort;
 		$sort->attributes = array(

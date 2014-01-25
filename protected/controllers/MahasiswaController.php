@@ -32,7 +32,12 @@ class MahasiswaController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update', 'jsonAutoComplete'),
+				'actions'=>array('create',
+					'update', 
+					'jsonAutoComplete',
+					'jsonNamaAutoComplete',
+					'jsonNimAutoComplete',
+					),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -184,6 +189,38 @@ class MahasiswaController extends Controller
 			$option = new stdClass();
 			$option->label = $item->attributes['nama'] . ' | ' . $item->attributes['nim'] . ' | ' . $item->attributes['id'];
 			$option->value = $item->attributes['id'];
+			$source[] = $option;
+		}
+		echo json_encode($source);
+	}
+
+	public function actionJsonNamaAutoComplete($term = null)
+	{
+		$criteria = new CDbCriteria;
+		$criteria->addSearchCondition('nama', $term, true);
+		$criteria->limit = 50;
+		$collection = Mahasiswa::model()->findAll($criteria);
+		$source = array();
+		foreach($collection as $item){
+			$option = new stdClass();
+			$option->label = $item->attributes['nama'];
+			$option->value = $item->attributes['nama'];
+			$source[] = $option;
+		}
+		echo json_encode($source);
+	}
+
+	public function actionJsonNimAutoComplete($term = null)
+	{
+		$criteria = new CDbCriteria;
+		$criteria->addSearchCondition('nim', $term, true);
+		$criteria->limit = 50;
+		$collection = Mahasiswa::model()->findAll($criteria);
+		$source = array();
+		foreach($collection as $item){
+			$option = new stdClass();
+			$option->label = $item->attributes['nim'];
+			$option->value = $item->attributes['nim'];
 			$source[] = $option;
 		}
 		echo json_encode($source);

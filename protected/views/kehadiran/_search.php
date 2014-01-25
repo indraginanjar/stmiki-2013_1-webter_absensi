@@ -22,13 +22,119 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->label($model,'matakuliah_id'); ?>
+		<?php echo $form->textField($model,'matakuliah_id'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'matakuliah_nama'); ?>
+		<?php //echo $form->textField($model,'matakuliah_nama'); ?>
+		<?php
+			$this->widget('zii.widgets.jui.CJuiAutoComplete',array(
+				'model'=>$model,
+				'attribute'=>'matakuliah_nama',
+			    	'name'=> get_class($model).'[matakuliah_nama]',
+			    	'source'=>$this->createUrl('matakuliah/jsonNamaAutoComplete'),
+			    	// additional javascript options for the autocomplete plugin
+			    	//'options'=>array(
+				//	'minLength'=>'1',
+			    	//),
+			    	'htmlOptions'=>array(
+					'style'=>'height:20px;',
+			    	),
+			));
+		?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->label($model,'perkuliahan_pertemuan'); ?>
 		<?php echo $form->textField($model,'perkuliahan_pertemuan'); ?>
 	</div>
 
 	<div class="row">
+		<?php echo $form->label($model,'tahun_bulan'); ?>
+		<?php //echo $form->textField($model,'tahun_bulan', array('placeholder'=>'yyyy-M')); ?>
+		<?php
+		$this->widget('zii.widgets.jui.CJuiDatePicker', array(
+			'model' => $model,
+			'attribute' => 'tahun_bulan',
+			//'value'=>isset($_POST['tahun_bulan']) ? $_POST['tahun_bulan'] : '',
+			//'name'=>'bulan_tahun',
+			'language' => 'id',
+			'options'=>array(
+				'dateFormat' => 'yy-mm',
+				'showOtherMonths' =>true,
+				'selectOtherMonths' =>true,
+				),
+			'htmlOptions' => array(
+				//'size' => '10',         // textField size
+				'maxlength' => '10',    // textField maxlength
+				'placeholder' => 'yyyy-MM',
+				'val'=>isset($_POST['tahun_bulan']) ? $_POST['tahun_bulan'] : '',
+				),
+		));
+		?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'tahun_minggu'); ?>
+		<?php //echo $form->textField($model,'tahun_minggu', array('placeholder'=>'yyyy-W')); ?>
+		<?php
+		$this->widget('zii.widgets.jui.CJuiDatePicker', array(
+			'model' => $model,
+			'attribute' => 'tahun_minggu',
+			//'value'=>isset($_POST['tahun_minggu']) ? $_POST['tahun_minggu'] : '',
+			//'name'=>'tahun_minggu',
+			'language' => 'id',
+			'options'=>array(
+				//`'dateFormat' => 'w-yy',
+				//'dateFormat' => 'yy-mm-dd',
+				'showWeek'=>true,
+				'showOtherMonths' =>true,
+				'selectOtherMonths' =>true,
+				'onSelect'=> 'js:function(dateText, inst) {
+					$(this).val( $.datepicker.formatDate("yy-", $(this).datepicker("getDate")) + ("00" + $.datepicker.iso8601Week($(this).datepicker("getDate"))).slice(-2));
+					}',
+				),
+			'htmlOptions' => array(
+				//'size' => '20',         // textField size
+				'maxlength' => '10',    // textField maxlength
+				'val'=>isset($_POST['tahun_minggu']) ? $_POST['tahun_minggu'] : '',
+				'placeholder'=>'yyyy-W',
+				),
+		));
+		?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->label($model,'perkuliahan_tanggal'); ?>
-		<?php echo $form->textField($model,'perkuliahan_tanggal'); ?>
+		<?php //echo $form->textField($model,'perkuliahan_tanggal'); ?>
+		<?php
+		$this->widget('zii.widgets.jui.CJuiDatePicker', array(
+			'model' => $model,
+			'attribute' => 'perkuliahan_tanggal',
+			'language' => 'id',
+			'options'=>array(
+				'dateFormat' => 'yy-mm-dd',
+				'showOtherMonths' =>true,
+				'selectOtherMonths' =>true,
+				),
+			'htmlOptions' => array(
+				'size' => '10',         // textField size
+				'maxlength' => '10',    // textField maxlength
+				),
+		));
+		?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'perkuliahan_mulai'); ?>
+		<?php echo $form->textField($model,'perkuliahan_mulai', array('placeholder'=>'hh:mm')); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'perkuliahan_selesai'); ?>
+		<?php echo $form->textField($model,'perkuliahan_selesai', array('placeholder'=>'hh:mm')); ?>
 	</div>
 
 	<div class="row">
@@ -38,22 +144,62 @@
 
 	<div class="row">
 		<?php echo $form->label($model,'mahasiswa_nim'); ?>
-		<?php echo $form->textField($model,'mahasiswa_nim'); ?>
+		<?php //echo $form->textField($model,'mahasiswa_nim'); ?>
+		<?php
+			$this->widget('zii.widgets.jui.CJuiAutoComplete',array(
+				'model'=>$model,
+				'attribute'=>'mahasiswa_nim',
+			    	'name'=> get_class($model).'[mahasiswa_nim]',
+			    	'source'=>$this->createUrl('mahasiswa/jsonNimAutoComplete'),
+			    	// additional javascript options for the autocomplete plugin
+			    	//'options'=>array(
+				//	'minLength'=>'1',
+			    	//),
+			    	'htmlOptions'=>array(
+					'style'=>'height:20px;',
+			    	),
+			));
+		?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->label($model,'mahasiswa_nama'); ?>
-		<?php echo $form->textField($model,'mahasiswa_nama'); ?>
+		<?php //echo $form->textField($model,'mahasiswa_nama'); ?>
+		<?php
+			$this->widget('zii.widgets.jui.CJuiAutoComplete',array(
+				'model'=>$model,
+				'attribute'=>'mahasiswa_nama',
+			    	'name'=> get_class($model).'[mahasiswa_nama]',
+			    	'source'=>$this->createUrl('mahasiswa/jsonNamaAutoComplete'),
+			    	// additional javascript options for the autocomplete plugin
+			    	//'options'=>array(
+				//	'minLength'=>'1',
+			    	//),
+			    	'htmlOptions'=>array(
+					'style'=>'height:20px;',
+			    	),
+			));
+		?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->label($model,'masuk'); ?>
-		<?php echo $form->textField($model,'masuk'); ?>
+		<?php echo $form->textField($model,'masuk', array('placeholder'=>'hh:mm')); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->label($model,'keluar'); ?>
-		<?php echo $form->textField($model,'keluar'); ?>
+		<?php echo $form->textField($model,'keluar', array('placeholder'=>'hh:mm')); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'lama_di_kelas'); ?>
+		<?php echo $form->textField($model,'lama_di_kelas', array('placeholder'=>'hh:mm')); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'keterangan'); ?>
+		<?php echo $form->textField($model,'keterangan'); ?>
 	</div>
 
 	<div class="row buttons">
