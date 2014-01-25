@@ -3,7 +3,7 @@
 /* @var $model Kehadiran */
 
 $this->breadcrumbs=array(
-	'Kehadirans'=>array('index'),
+	'Kehadiran'=>array('index'),
 	'Create',
 );
 
